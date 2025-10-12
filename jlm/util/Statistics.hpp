@@ -589,7 +589,7 @@ public:
    *  - the resulting output file already exists
    */
   [[nodiscard]] File
-  CreateOutputFile(std::string fileNameSuffix, bool includeCount = false);
+  createOutputFile(std::string fileNameSuffix, bool includeCount = false);
 
 private:
   StatisticsCollectorSettings Settings_;
