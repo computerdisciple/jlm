@@ -39,7 +39,6 @@ libhls_SOURCES = \
     jlm/hls/ir/hls.cpp \
     \
     jlm/hls/opt/cne.cpp \
-    jlm/hls/opt/InvariantLambdaMemoryStateRemoval.cpp \
     jlm/hls/opt/IOBarrierRemoval.cpp \
     jlm/hls/opt/IOStateElimination.cpp \
     \
@@ -85,7 +84,6 @@ libhls_HEADERS = \
     jlm/hls/ir/hls.hpp \
     \
     jlm/hls/opt/cne.hpp \
-    jlm/hls/opt/InvariantLambdaMemoryStateRemoval.hpp \
     jlm/hls/opt/IOBarrierRemoval.hpp \
     jlm/hls/opt/IOStateElimination.hpp \
     \
@@ -108,8 +106,6 @@ libhls_TESTS += \
     tests/jlm/hls/backend/rvsdg2rhls/test-loop-passthrough \
     tests/jlm/hls/opt/IOBarrierRemovalTests \
     tests/jlm/hls/util/ViewTests \
-    \
-    tests/jlm/hls/opt/InvariantLambdaMemoryStateRemovalTests \
 
 libhls_TEST_LIBS += \
     libjlmtest \
