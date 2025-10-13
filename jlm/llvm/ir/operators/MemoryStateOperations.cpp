@@ -185,7 +185,7 @@ MemoryStateJoinOperation::NormalizeDuplicateOperands(
     if (seenOperands.Contains(operand))
       continue;
 
-    seenOperands.Insert(operand);
+    seenOperands.insert(operand);
     newOperands.emplace_back(operand);
   }
 
