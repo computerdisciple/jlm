@@ -26,6 +26,7 @@
 #include <jlm/llvm/opt/PartialRedundancyElimination.hpp>
 #include <jlm/llvm/opt/LoadChainSeparation.hpp>
 #include <jlm/llvm/opt/LoopUnswitching.hpp>
+#include <jlm/llvm/opt/PredicateCorrelation.hpp>
 #include <jlm/llvm/opt/pull.hpp>
 #include <jlm/llvm/opt/push.hpp>
 #include <jlm/llvm/opt/reduction.hpp>
@@ -424,7 +425,6 @@ JlmOptCommand::CreateTransformation(JlmOptCommandLineOptions::OptimizationId opt
     return std::make_unique<llvm::DeadNodeElimination>();
   case JlmOptCommandLineOptions::OptimizationId::PartialRedundancyElimination:
     return std::make_unique<llvm::PartialRedundancyElimination>();
-    return std::make_shared<llvm::DeadNodeElimination>();
   case JlmOptCommandLineOptions::OptimizationId::FunctionInlining:
     return std::make_shared<llvm::FunctionInlining>();
   case JlmOptCommandLineOptions::OptimizationId::IfConversion:
@@ -441,6 +441,8 @@ JlmOptCommand::CreateTransformation(JlmOptCommandLineOptions::OptimizationId opt
     return std::make_shared<llvm::NodeHoisting>();
   case JlmOptCommandLineOptions::OptimizationId::NodeReduction:
     return std::make_shared<llvm::NodeReduction>();
+  case JlmOptCommandLineOptions::OptimizationId::PredicateCorrelation:
+    return std::make_shared<llvm::PredicateCorrelation>();
   case JlmOptCommandLineOptions::OptimizationId::RvsdgTreePrinter:
     return std::make_shared<llvm::RvsdgTreePrinter>(
         CommandLineOptions_.GetRvsdgTreePrinterConfiguration());
