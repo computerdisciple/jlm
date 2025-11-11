@@ -46,9 +46,6 @@ struct ThetaData
  */
 class PartialRedundancyElimination final : public jlm::rvsdg::Transformation
 {
-  class Context;
-  class Statistics;
-
 public:
   ~PartialRedundancyElimination() noexcept override;
 
@@ -64,8 +61,6 @@ public:
 
   void
   Run(jlm::rvsdg::RvsdgModule & module, jlm::util::StatisticsCollector & statisticsCollector) override;
-
-
 
 private:
   enum class ThetaMode{
@@ -84,11 +79,12 @@ private:
   std::unordered_map<rvsdg::Node*, ThetaData> thetas_;
 
   std::unordered_map< rvsdg::Output *, rvsdg::gvn::GVN_Val> output_to_gvn_;
+
   void RegisterGVN(rvsdg::Output * output, rvsdg::gvn::GVN_Val gvn){
     output_to_gvn_[output] = gvn; //overwrites old values
   }
 
-  rvsdg::gvn::GVN_Manager gvn_;
+  rvsdg::gvn::GvnManager gvn_;
   inline rvsdg::gvn::GVN_Val GVNOrZero(rvsdg::Output* edge){
     if (output_to_gvn_.find(edge) != output_to_gvn_.end()){
       return output_to_gvn_[edge];

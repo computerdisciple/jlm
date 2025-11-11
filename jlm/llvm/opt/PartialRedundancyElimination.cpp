@@ -354,7 +354,7 @@ void PartialRedundancyElimination::GVN_VisitGammaNode(rvsdg::Node * node)
   });
 }
 
-static rvsdg::gvn::GVN_Val mergeIntoLV(rvsdg::gvn::GVN_Manager& gvn, rvsdg::gvn::GVN_Val olderValue, rvsdg::gvn::GVN_Val newerValue, rvsdg::gvn::GVN_Val prism)
+static rvsdg::gvn::GVN_Val mergeIntoLV(rvsdg::gvn::GvnManager& gvn, rvsdg::gvn::GVN_Val olderValue, rvsdg::gvn::GVN_Val newerValue, rvsdg::gvn::GVN_Val prism)
 {
   if (olderValue == newerValue){return olderValue;}
   auto MERGE_ON_LOOP_ENTRY = gvn.FromStr("MERGE_ON_LOOP_ENTRY");

@@ -310,10 +310,10 @@ namespace jlm::rvsdg::gvn {
     /////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
-    class GVN_Manager{
+    class GvnManager{
 
-        struct GVN_Deps {
-            GVN_Deps():op(0){}
+        struct GvnDeps {
+            GvnDeps():op(0){}
             GVN_Val op;
             std::vector<std::pair< GVN_Val, size_t> > args;
             void push(GVN_Val v, size_t count){args.emplace_back(v, count);}
@@ -334,7 +334,7 @@ namespace jlm::rvsdg::gvn {
         std::unordered_map< std::string,  GVN_Val > str_to_gvn_;     // Convenience map
         std::unordered_map< const void*, GVN_Val > ptr_to_gvn_;      // Convenience map
         std::unordered_map< size_t, GVN_Val > word_to_gvn_;          // Convenience map
-        std::unordered_map< GVN_Val, std::optional<GVN_Deps> > gvn_;
+        std::unordered_map< GVN_Val, std::optional<GvnDeps> > gvn_;
 
     public:
         size_t stat_collisions;
@@ -343,7 +343,7 @@ namespace jlm::rvsdg::gvn {
 
         size_t max_ca_size;
 
-        GVN_Manager() : stat_collisions(0), stat_leaf_collisions(0), stat_ca_too_big(0), max_ca_size(32) {
+        GvnManager() : stat_collisions(0), stat_leaf_collisions(0), stat_ca_too_big(0), max_ca_size(32) {
             // Add constant symbols to the table of all values such that
             //     values cannot collide.
             DefineConst(GVN_OP_ANY_ORDERED);
@@ -370,13 +370,13 @@ namespace jlm::rvsdg::gvn {
             gvn_.insert({g,std::nullopt});
             return g;
         }
-        GVN_Manager& Op(GVN_Val op) {
+        GvnManager& Op(GVN_Val op) {
             if (builder_op_){throw std::runtime_error("Multiple calls to Op(...) or missing End()");}
             builder_op_ = op;
             builder_flags_ = 0;
             return *this;
         }
-        GVN_Manager& Arg(GVN_Val arg) {
+        GvnManager& Arg(GVN_Val arg) {
             builder_args_.emplace_back(arg);
             return *this;
         }
@@ -438,7 +438,7 @@ namespace jlm::rvsdg::gvn {
             return ptr_to_gvn_[p];
         }
 
-        GVN_Manager& FromPartitions(BrittlePrism& brittle)
+        GvnManager& FromPartitions(BrittlePrism& brittle)
         {
           // Call Arg( ) once for each partition
           {
@@ -453,7 +453,7 @@ namespace jlm::rvsdg::gvn {
           }
           return *this;
         }
-        GVN_Manager& OneDisruptorPerPartition(BrittlePrism& brittle)
+        GvnManager& OneDisruptorPerPartition(BrittlePrism& brittle)
         {
           // Call Arg( ) once for each partition
           {
@@ -479,7 +479,7 @@ namespace jlm::rvsdg::gvn {
         }
         GVN_Val Create(GVN_Val op, const std::vector<GVN_Val>& args) {
             if (args.empty()){throw std::runtime_error("Logic error: GVN operator applied to zero args.");}
-            GVN_Deps new_gvn = GVN_Deps();
+            GvnDeps new_gvn = GvnDeps();
             new_gvn.op = op;
             // Initialize new_gvn.args
             //      Either a copy of args or count of operator cluster leaves
@@ -531,7 +531,7 @@ namespace jlm::rvsdg::gvn {
             }while(gvn_.find(g) != gvn_.end());
             return g;
         }
-        void NormalizeCa(GVN_Deps& deps)
+        void NormalizeCa(GvnDeps& deps)
         {
           // Flatten
           for (size_t i = 0; i < deps.args.size(); i++) {
@@ -560,7 +560,7 @@ namespace jlm::rvsdg::gvn {
           while (deps.args.size() && deps.args[ deps.args.size() - 1 ].first == GVN_TOMBSTONE) {deps.args.pop_back();}
         }
 
-        std::pair<GVN_Val, bool> CalculateHash(GVN_Deps& deps) {
+        std::pair<GVN_Val, bool> CalculateHash(GvnDeps& deps) {
             // Return a gvn value based on operator and arguments
             // The second element of the pair is true if the value cannot collide
             if (deps.op == GVN_OP_ADDITION || deps.op == GVN_OP_MULTIPLY){NormalizeCa(deps);}
@@ -655,7 +655,7 @@ namespace jlm::rvsdg::gvn {
             return {v, false};
         }
 
-        static bool DepsEqual(GVN_Deps& a, GVN_Deps& b) {
+        static bool DepsEqual(GvnDeps& a, GvnDeps& b) {
             if (a.op != b.op) {return false;}
             if (a.args.size() != b.args.size()) {return false;}
             for (size_t i = 0; i < a.args.size(); i++) {
@@ -678,13 +678,13 @@ namespace jlm::rvsdg::gvn {
     {
         BrittlePrism::Test0();
         BrittlePrism::Test1();
-        GVN_Manager::Test0();
-        GVN_Manager::Test1();
-        GVN_Manager::Test2();
-        GVN_Manager::Test3();
-        GVN_Manager::Test4();
-        GVN_Manager::Test5();
-        GVN_Manager::Test6();
+        GvnManager::Test0();
+        GvnManager::Test1();
+        GvnManager::Test2();
+        GvnManager::Test3();
+        GvnManager::Test4();
+        GvnManager::Test5();
+        GvnManager::Test6();
     }
 };
 
