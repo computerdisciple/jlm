@@ -1,7 +1,7 @@
 name: ClangTidy
 
 on:
-  workflows_dispatch:
+  workflow_dispatch:
   pull_request:
     branches: [ master ]
 
